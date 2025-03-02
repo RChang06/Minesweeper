@@ -19,6 +19,8 @@ GameView* globalGameView = nullptr;
 class GamePanel
 {
 public:
+    //This is just the functions called whenever a valid click is clicked
+    // Calls upon the GameView class that handles the display
     void initialView(HWND hwnd)
 
     {
@@ -106,33 +108,42 @@ int WINAPI WinMain(HINSTANCE hThisInstance, HINSTANCE hPrevInstance, LPSTR lpszA
 // Message handler for the window
 LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+
+    //message is an integer value returned by the program when a certain type of click is pressed
     static DWORD lastClickTime = 0;
     //retrieve the x and y cordinates, and make it relative to window client rather than personal screen
     POINT pt = { LOWORD(lParam), HIWORD(lParam) };
     ScreenToClient(hwnd, &pt);
     
-
+    //Integer 123 corresponds to right click, while the proper WM_RBUTTON DOWN is 516.
+    // This is just a lazy hard code to solve that scenario
     if (message == 123 ){
         message = 516; 
     }
     
-
+    //Issues commands to initialize depending what message is returned
     switch (message)
     {
+    // set up the board if message is 1
     case WM_CREATE:
         gamePanel.initialView(hwnd); // Initialize the view
         break;
-
+    
+    //initialize the function processRightClick, when the user right clicks
     case WM_RBUTTONDOWN:
 
         gamePanel.processRightClick(hwnd, pt.x, pt.y);
         break;
     
+    //double CLick    
+   
+    //trouble shooting ignore
     case WM_LBUTTONDBLCLK:
         std::cout<<"asdfa";
        
         break;
 
+    // apparently double click message = 273 alligns with WM_COMMAND and not any of the other double clicks
     case WM_COMMAND: {
         DWORD currentTime = GetTickCount();
         if (currentTime - lastClickTime < GetDoubleClickTime()){

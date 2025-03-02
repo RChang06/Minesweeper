@@ -63,7 +63,8 @@ void Board::revealCell(int row, int col, GameView* GameView) {
     if (grid[row][col].isEmpty()) {
         for (int i = row - 1; i <= row + 1; i++) {
             for (int j = col - 1; j <= col + 1; j++) {
-                if (i >= 0 && i < rows && j >= 0 && j < cols) {  // Fix: Check bounds
+                if (i >= 0 && i < rows && j >= 0 && j < cols) {  // left click, initializes revealing
+
                     GameView->leftClick(i, j);
                 }
             }

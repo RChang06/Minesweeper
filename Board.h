@@ -4,6 +4,8 @@
 #include <iostream>
 #include <vector>
 #include "item.h"
+//class declartion and function prototypes for the board object
+
 class GameView; 
 
 class Board {
@@ -15,7 +17,7 @@ private:
     // int totalCorrectFlags;
     int revealed;
     int totalMines;
-    GameView* gameView;
+    GameView* gameView; //Pointer to the gameView object
     
 public:
     Board(int rows, int cols);

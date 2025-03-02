@@ -29,7 +29,7 @@ void GameView::initialBoard()
     // Display the board in the console
     displayBoard();
 }
-
+//Iterates across the board, revealing every square 
 void GameView::revealAll(){
     int row = board.getRow();
     int col = board.getCol();
@@ -39,27 +39,36 @@ void GameView::revealAll(){
         }
     }
 }
-
+//Reveals a single grid
 void GameView::revealSingle(int row, int col){
+    //call upon the board object to perform some logic
     std::vector<std::vector<Item>> grid = board.getGrid();
+    //Calls upon the current grid
     Item currentButton = grid[row][col];
+
+    //operation to turn the position to its corresponding button ID
     int buttonID = (row)*board.getCol() + col+1;
     HWND hwndButton = GetDlgItem(hwnd,buttonID);
 
-
+    //if the button being clicked is on a mine
     if(currentButton.isMineCell()){
+        //display X for bomb
         SetWindowTextW(hwndButton, L"x");
     }
 
+    //if it is not a bomb, display the number on it instead
     else if(currentButton.getAdjacentMines()>0){
+
         std::wstringstream captionNum;
+        //the number being displayed corresponds with the number of adjacent mines
         captionNum << currentButton.getAdjacentMines();
         std::wstring wideNumber = captionNum.str();
         
-
+        //Button will display number
         SetWindowTextW(hwndButton, wideNumber.c_str());
 
     }
+    //if it is empty, get rid of the button (indicates that it has been revealed already)
     else if(currentButton.isEmpty()){
 
         // Destroy the button
@@ -122,7 +131,7 @@ void GameView::leftClick(int row, int col){
     //to reveal a cell, it can't already be revealed or flagged
     if (!currentButton.isRevealedCell() && !currentButton.isFlaggedCell()){
         if (currentButton.isMineCell()){
-            
+            //when you hit a bomb, reveal all the cells and display a game over screen
             revealAll();
 
             MessageBox(NULL, TEXT("Game Over"), TEXT("Game Over!!"), MB_OK);
@@ -131,6 +140,7 @@ void GameView::leftClick(int row, int col){
 
         revealSingle(row, col);
         if (board.isSuccess()){
+        
             revealAll();
             MessageBox(NULL, TEXT("You won"), TEXT("Success!!"), MB_OK);
 
@@ -184,7 +194,7 @@ void GameView::processDoubleClick(int index){
         std::cout << "Invalid button ID: " << index << std::endl;
     }
 }
-
+// trouble shooting stuff, basically displays board on the terminal by printing
 void GameView::displayBoard()
 {
     std::vector<std::vector<Item>> grid = board.getGrid();
